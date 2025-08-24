@@ -1,0 +1,6 @@
+subprocess
+threading
+io
+requests
+pynput
+pyperclip
